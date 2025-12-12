@@ -1,6 +1,11 @@
 pipeline {
   agent any
 
+  // ← ADD THIS BLOCK TO FIX npm NOT FOUND
+  tools {
+    nodejs 'Node18'   // Name of NodeJS installation in Jenkins Global Tool Configuration
+  }
+
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')   // FIXED
     SONAR_TOKEN = credentials('sonar-token2')                // FIXED
