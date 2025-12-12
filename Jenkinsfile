@@ -1,14 +1,14 @@
 pipeline {
   agent any
 
-  // ← ADD THIS BLOCK TO FIX npm NOT FOUND
+  // ← FIX npm NOT FOUND
   tools {
     nodejs 'Node18'   // Name of NodeJS installation in Jenkins Global Tool Configuration
   }
 
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')   // FIXED
-    SONAR_TOKEN = credentials('sonar-token2')                // FIXED
+    DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')
+    SONAR_TOKEN = credentials('sonar-token2')
     DOCKER_IMAGE = "yourdockerhubuser/react-frontend:${env.BUILD_NUMBER}"
   }
 
@@ -22,7 +22,8 @@ pipeline {
 
     stage('Install & Test') {
       steps {
-        sh 'npm ci'
+        // ← FIX npm dependency issue
+        sh 'npm ci --legacy-peer-deps'
         sh 'npm test -- --watchAll=false || true'
       }
     }
