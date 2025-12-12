@@ -1,7 +1,7 @@
 {
   "name": "cicd_pipeline",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +10,9 @@
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css,md}\"",
     "test": "jest --watchAll=false"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

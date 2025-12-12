@@ -3,7 +3,7 @@ pipeline {
 
   // ← ADD THIS BLOCK TO FIX npm NOT FOUND
   tools {
-    nodejs 'Node18'   // Name of NodeJS installation in Jenkins Global Tool Configuration
+    nodejs 'Node20'   // Name of NodeJS installation in Jenkins Global Tool Configuration
   }
 
   environment {
