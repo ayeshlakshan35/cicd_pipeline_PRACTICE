@@ -10,6 +10,7 @@ pipeline {
         SONAR_TOKEN = credentials('sonar-token2')                // SonarQube token
         DOCKER_IMAGE = "ayeshlakshan35/react-frontend:${env.BUILD_NUMBER}"
         SONAR_HOST_URL = 'http://sonarqube:9000'                // Update to actual SonarQube host/IP
+        DOCKERHUB_USER = 'yourdockerhubuser'                    // Replace with your DockerHub username
     }
 
     stages {
@@ -36,7 +37,6 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    // Run SonarQube scan; if it fails, pipeline stops
                     sh 'npx sonar-scanner -Dsonar.projectKey=$JOB_NAME -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN'
                 }
             }
@@ -50,16 +50,22 @@ pipeline {
 
         stage('Trivy scan image') {
             steps {
-                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 $DOCKER_IMAGE || true'
+                // Use light mode to avoid downloading the full DB
+                sh '''
+                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --light --exit-code 1 $DOCKER_IMAGE || true
+                '''
             }
         }
 
         stage('Push image') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker tag $DOCKER_IMAGE ayeshlakshan35/react-frontend:latest'
-                sh 'docker push $DOCKER_IMAGE'
-                sh 'docker push ayeshlakshan35/react-frontend:latest'
+                // Use correct DockerHub login
+                sh '''
+                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:latest
+                docker push $DOCKER_IMAGE
+                docker push $DOCKERHUB_USER/react-frontend:latest
+                '''
             }
         }
 
@@ -79,3 +85,4 @@ pipeline {
         }
     }
 }
+
