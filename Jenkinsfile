@@ -57,9 +57,9 @@ pipeline {
         stage('Push image') {
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker tag $DOCKER_IMAGE yourdockerhubuser/react-frontend:latest'
+                sh 'docker tag $DOCKER_IMAGE ayeshlakshan35/react-frontend:latest'
                 sh 'docker push $DOCKER_IMAGE'
-                sh 'docker push yourdockerhubuser/react-frontend:latest'
+                sh 'docker push ayeshlakshan35/react-frontend:latest'
             }
         }
 
