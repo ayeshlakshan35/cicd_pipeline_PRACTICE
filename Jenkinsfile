@@ -9,7 +9,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')   // DockerHub credentials
         SONAR_TOKEN = credentials('sonar-token2')                // SonarQube token
         DOCKER_IMAGE = "ayeshlakshan35/react-frontend:${env.BUILD_NUMBER}"
-        SONAR_HOST_URL = 'http://localhost:9000'                // Update to actual SonarQube host/IP
+        SONAR_HOST_URL = 'http://sonarqube:9000'                // Update to actual SonarQube host/IP
     }
 
     stages {
