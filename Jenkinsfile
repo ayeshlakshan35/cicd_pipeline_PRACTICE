@@ -10,7 +10,7 @@ pipeline {
         SONAR_TOKEN = credentials('sonar-token2')                // SonarQube token
         DOCKER_IMAGE = "ayeshlakshan35/react-frontend:${env.BUILD_NUMBER}"
         SONAR_HOST_URL = 'http://sonarqube:9000'                // Update to actual SonarQube host/IP
-        DOCKERHUB_USER = 'yourdockerhubuser'                    // Replace with your DockerHub username
+        DOCKERHUB_USER = 'ayeshlakshan35'                       // Replace with your DockerHub username
     }
 
     stages {
@@ -50,16 +50,17 @@ pipeline {
 
         stage('Trivy scan image') {
             steps {
-                // Use light mode to avoid downloading the full DB
+                echo "Running Trivy vulnerability scan in light mode..."
                 sh '''
-                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --light --exit-code 1 $DOCKER_IMAGE || true
+                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                aquasec/trivy image --light --exit-code 1 $DOCKER_IMAGE || true
                 '''
             }
         }
 
         stage('Push image') {
             steps {
-                // Use correct DockerHub login
+                echo "Logging in to DockerHub and pushing image..."
                 sh '''
                 echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                 docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:latest
@@ -85,4 +86,5 @@ pipeline {
         }
     }
 }
+
 
