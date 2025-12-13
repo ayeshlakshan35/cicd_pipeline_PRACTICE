@@ -9,16 +9,24 @@ pipeline {
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')   // FIXED
     SONAR_TOKEN = credentials('sonar-token2')                // FIXED
-    DOCKER_IMAGE = "yourdockerhubuser/react-frontend:${env.BUILD_NUMBER}"
+    DOCKER_IMAGE = "ayeshlakshan35/react-frontend:${env.BUILD_NUMBER}"
   }
 
   stages {
+
+    stage('Clean Workspace') {
+            steps {
+                deleteDir() // Deletes all files in the workspace
+            }
+        }
+    
 
     stage('Checkout') {
       steps {
         checkout scm
       }
     }
+
 
     stage('Install & Test') {
       steps {
