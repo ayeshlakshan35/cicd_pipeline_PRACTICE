@@ -1,32 +1,32 @@
 pipeline {
   agent any
 
-  // ← ADD THIS BLOCK TO FIX npm NOT FOUND
+  // ← Fix npm not found
   tools {
-    nodejs 'Node20'   // Name of NodeJS installation in Jenkins Global Tool Configuration
+    nodejs 'Node20'   // NodeJS installation in Jenkins Global Tool Configuration
   }
 
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')   // FIXED
-    SONAR_TOKEN = credentials('sonar-token2')                // FIXED
+    DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')
+    SONAR_TOKEN = credentials('sonar-token2')
     DOCKER_IMAGE = "ayeshlakshan35/react-frontend:${env.BUILD_NUMBER}"
   }
 
   stages {
 
-    stage('Clean Workspace') {
-            steps {
-                deleteDir() // Deletes all files in the workspace
-            }
-        }
-    
-
     stage('Checkout') {
       steps {
-        checkout scm
+        // Proper Git checkout in a clean workspace
+        git branch: 'main', url: 'https://github.com/ayeshlakshan35/cicd_pipeline_PRACTICE.git'
       }
     }
 
+    stage('Clean old build artifacts') {
+      steps {
+        // Only remove node_modules and dist folder, keep .git intact
+        sh 'rm -rf node_modules dist'
+      }
+    }
 
     stage('Install & Test') {
       steps {
@@ -74,9 +74,9 @@ pipeline {
         sh """
           echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
         """
-        sh "docker tag ${DOCKER_IMAGE} yourdockerhubuser/react-frontend:latest"
+        sh "docker tag ${DOCKER_IMAGE} ayeshlakshan35/react-frontend:latest"
         sh "docker push ${DOCKER_IMAGE}"
-        sh "docker push yourdockerhubuser/react-frontend:latest"
+        sh "docker push ayeshlakshan35/react-frontend:latest"
       }
     }
 
