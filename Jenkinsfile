@@ -84,15 +84,21 @@ pipeline {
             steps {
                 echo "Deploying to Kubernetes using kubectl container..."
                 sh '''
+                # Apply YAML manifests
                 docker run --rm \
+                  --network k3d-dev \
                   --volumes-from jenkins \
                   -v $HOME/.kube:/root/.kube \
+                  -e KUBECONFIG=/root/.kube/config \
                   bitnami/kubectl:latest \
                   apply -f /var/jenkins_home/workspace/CICD-PIPELINE/k8s
 
+                # Update deployment image
                 docker run --rm \
+                  --network k3d-dev \
                   --volumes-from jenkins \
                   -v $HOME/.kube:/root/.kube \
+                  -e KUBECONFIG=/root/.kube/config \
                   bitnami/kubectl:latest \
                   set image deployment/react-frontend react=$DOCKER_IMAGE
                 '''
@@ -109,6 +115,7 @@ pipeline {
         }
     }
 }
+
 
 
 
