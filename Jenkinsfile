@@ -94,14 +94,16 @@ pipeline {
                 docker run --rm \
                   --network host \
                   -v /home/esh/.kube:/root/.kube \
+                  -v /var/jenkins_home/workspace/CICD-PIPELINE/k8s:/k8s \
                   -e KUBECONFIG=/root/.kube/config \
                   bitnami/kubectl:latest \
-                  apply -f /var/jenkins_home/workspace/CICD-PIPELINE/k8s --validate=false
+                  apply -f /k8s --validate=false
 
                 # Update deployment image
                 docker run --rm \
                   --network host \
                   -v /home/esh/.kube:/root/.kube \
+                  -v /var/jenkins_home/workspace/CICD-PIPELINE/k8s:/k8s \
                   -e KUBECONFIG=/root/.kube/config \
                   bitnami/kubectl:latest \
                   set image deployment/react-frontend react=$DOCKER_IMAGE --record
