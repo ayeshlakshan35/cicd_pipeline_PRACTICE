@@ -65,15 +65,17 @@ pipeline {
         }
 
         stage('Push image') {
-            steps {
+             steps {
                 echo "Logging in to DockerHub and pushing image..."
                 sh '''
-                echo $DOCKERHUB_CREDENTIALS_PSW | docker login \
-                  -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                # Login to DockerHub
+                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
 
+                # Tag and push the image with build number
                 docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:${BUILD_NUMBER}
                 docker push $DOCKERHUB_USER/react-frontend:${BUILD_NUMBER}
 
+                # Tag and push the image as latest
                 docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:latest
                 docker push $DOCKERHUB_USER/react-frontend:latest
                 '''
