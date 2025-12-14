@@ -68,8 +68,12 @@ pipeline {
              steps {
                 echo "Logging in to DockerHub and pushing image..."
                 sh '''
+                # Set DockerHub credentials
+                DOCKER_USER=$DOCKERHUB_CREDENTIALS_USR
+                DOCKER_PASS=$DOCKERHUB_CREDENTIALS_PSW
+
                 # Login to DockerHub
-                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
                 # Tag and push the image with build number
                 docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:${BUILD_NUMBER}
@@ -115,3 +119,4 @@ pipeline {
         }
     }
 }
+
