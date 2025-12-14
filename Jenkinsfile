@@ -78,7 +78,19 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl set image deployment/react-frontend react=$DOCKER_IMAGE --record || kubectl apply -f k8s/'
+                echo "Deploying to Kubernetes using kubectl container..."
+                sh '''
+                docker run --rm \
+                  -v $HOME/.kube:/root/.kube \
+                  -v $(pwd)/k8s:/k8s \
+                  bitnami/kubectl:latest \
+                  kubectl set image deployment/react-frontend react=$DOCKER_IMAGE --record || \
+                docker run --rm \
+                  -v $HOME/.kube:/root/.kube \
+                  -v $(pwd)/k8s:/k8s \
+                  bitnami/kubectl:latest \
+                  kubectl apply -f /k8s
+                '''
             }
         }
     }
@@ -92,6 +104,7 @@ pipeline {
         }
     }
 }
+
 
 
 
