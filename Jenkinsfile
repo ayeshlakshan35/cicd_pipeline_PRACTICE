@@ -92,24 +92,26 @@ pipeline {
                 sh '''
                 # Apply YAML manifests
                 docker run --rm \
-                  --network host \
-                  -v /home/esh/.kube:/root/.kube \
-                  -v /var/jenkins_home/workspace/CICD-PIPELINE/k8s:/k8s \
-                  -e KUBECONFIG=/root/.kube/config \
-                  bitnami/kubectl:latest \
-                  apply -f /k8s --validate=false
+                --network host \
+                --volumes-from jenkins \
+                -v /home/esh/.kube:/root/.kube \
+                -e KUBECONFIG=/root/.kube/config \
+                bitnami/kubectl:latest \
+                apply -f /var/jenkins_home/workspace/CICD-PIPELINE/k8s --validate=false
 
                 # Update deployment image
                 docker run --rm \
-                  --network host \
-                  -v /home/esh/.kube:/root/.kube \
-                  -v /var/jenkins_home/workspace/CICD-PIPELINE/k8s:/k8s \
-                  -e KUBECONFIG=/root/.kube/config \
-                  bitnami/kubectl:latest \
-                  set image deployment/react-frontend react=$DOCKER_IMAGE --record
+                --network host \
+                --volumes-from jenkins \
+                -v /home/esh/.kube:/root/.kube \
+                -e KUBECONFIG=/root/.kube/config \
+                bitnami/kubectl:latest \
+                set image deployment/react-frontend react=$DOCKER_IMAGE --record
                 '''
+            
             }
         }
+
     }
 
     post {
