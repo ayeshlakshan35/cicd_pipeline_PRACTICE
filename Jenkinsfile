@@ -84,12 +84,12 @@ pipeline {
                   -v $HOME/.kube:/root/.kube \
                   -v $(pwd)/k8s:/k8s \
                   bitnami/kubectl:latest \
-                  kubectl set image deployment/react-frontend react=$DOCKER_IMAGE --record || \
+                  set image deployment/react-frontend react=$DOCKER_IMAGE --record || \
                 docker run --rm \
                   -v $HOME/.kube:/root/.kube \
                   -v $(pwd)/k8s:/k8s \
                   bitnami/kubectl:latest \
-                  kubectl apply -f /k8s
+                  apply -f /k8s
                 '''
             }
         }
@@ -104,6 +104,7 @@ pipeline {
         }
     }
 }
+
 
 
 
