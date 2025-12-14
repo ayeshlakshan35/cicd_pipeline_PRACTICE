@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'Node20'   // NodeJS installation in Jenkins Global Tool Configuration
+        nodejs 'Node20'
     }
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')   // DockerHub credentials
-        SONAR_TOKEN = credentials('sonar-token2')                // SonarQube token
+        DOCKERHUB_CREDENTIALS = credentials('dockerHub-token')
+        SONAR_TOKEN = credentials('sonar-token2')
         DOCKER_IMAGE = "ayeshlaksha35/react-frontend:${env.BUILD_NUMBER}"
-        SONAR_HOST_URL = 'http://sonarqube:9000'                // Update to actual SonarQube host/IP
-        DOCKERHUB_USER = 'ayeshlaksha35'                       // Replace with your DockerHub username
+        SONAR_HOST_URL = 'http://sonarqube:9000'
+        DOCKERHUB_USER = 'ayeshlaksha35'
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
         stage('Install & Test') {
             steps {
                 sh 'npm ci'
-                sh 'npm test -- --watchAll=false || true'   // Continue even if no tests found
+                sh 'npm test -- --watchAll=false || true'
             }
         }
 
@@ -37,7 +37,12 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'npx sonar-scanner -Dsonar.projectKey=$JOB_NAME -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN'
+                    sh '''
+                    npx sonar-scanner \
+                      -Dsonar.projectKey=$JOB_NAME \
+                      -Dsonar.host.url=$SONAR_HOST_URL \
+                      -Dsonar.login=$SONAR_TOKEN
+                    '''
                 }
             }
         }
@@ -52,8 +57,9 @@ pipeline {
             steps {
                 echo "Running Trivy vulnerability scan in light mode..."
                 sh '''
-                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-                aquasec/trivy image --light --exit-code 1 $DOCKER_IMAGE || true
+                docker run --rm \
+                  -v /var/run/docker.sock:/var/run/docker.sock \
+                  aquasec/trivy image --light --exit-code 1 $DOCKER_IMAGE || true
                 '''
             }
         }
@@ -62,14 +68,12 @@ pipeline {
             steps {
                 echo "Logging in to DockerHub and pushing image..."
                 sh '''
-                # Login to DockerHub
-                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                echo $DOCKERHUB_CREDENTIALS_PSW | docker login \
+                  -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
 
-                # Tag and push the image with build number
                 docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:${BUILD_NUMBER}
                 docker push $DOCKERHUB_USER/react-frontend:${BUILD_NUMBER}
 
-                # Tag and push the image as latest
                 docker tag $DOCKER_IMAGE $DOCKERHUB_USER/react-frontend:latest
                 docker push $DOCKERHUB_USER/react-frontend:latest
                 '''
@@ -80,17 +84,15 @@ pipeline {
             steps {
                 echo "Deploying to Kubernetes using kubectl container..."
                 sh '''
-                # Apply Kubernetes manifests
                 docker run --rm \
+                  --volumes-from jenkins \
                   -v $HOME/.kube:/root/.kube \
-                  -v $(pwd)/k8s:/k8s \
                   bitnami/kubectl:latest \
-                  apply -f /k8s
+                  apply -f /var/jenkins_home/workspace/CICD-PIPELINE/k8s
 
-                # Update Deployment image
                 docker run --rm \
+                  --volumes-from jenkins \
                   -v $HOME/.kube:/root/.kube \
-                  -v $(pwd)/k8s:/k8s \
                   bitnami/kubectl:latest \
                   set image deployment/react-frontend react=$DOCKER_IMAGE
                 '''
@@ -107,6 +109,7 @@ pipeline {
         }
     }
 }
+
 
 
 
