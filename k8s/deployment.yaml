@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: react
-          image: ayeshlaksha35/react-frontend:latest
+          image: ayeshlaksha35/react-frontend:latest  # Jenkins will replace this dynamically
           ports:
             - containerPort: 80
