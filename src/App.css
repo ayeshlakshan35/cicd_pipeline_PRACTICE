@@ -50,10 +50,18 @@
   padding: 20px;
   gap: 12px;
   background: #f8f9fa;
+  align-items: flex-start;
+}
+
+.form-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .todo-input {
-  flex: 1;
+  width: 100%;
   padding: 15px 20px;
   border: 2px solid #e9ecef;
   border-radius: 12px;
@@ -71,9 +79,41 @@
   color: #adb5bd;
 }
 
+.deadline-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.deadline-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #495057;
+  background: white;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.deadline-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.deadline-label {
+  position: absolute;
+  right: 12px;
+  font-size: 0.75rem;
+  color: #adb5bd;
+  pointer-events: none;
+}
+
 .add-btn {
   width: 54px;
   height: 54px;
+  min-width: 54px;
   border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -83,6 +123,8 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  align-self: flex-start;
+  margin-top: 0;
 }
 
 .add-btn:hover {
@@ -122,6 +164,15 @@
 .filter-btn.active {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+}
+
+.overdue-badge {
+  background: #e74c3c;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
 }
 
 .todo-list {
@@ -168,9 +219,49 @@
   background: #f8f9fa;
 }
 
+/* Completed task - Green theme */
+.todo-item.completed {
+  background: linear-gradient(135deg, rgba(39, 174, 96, 0.08) 0%, rgba(46, 204, 113, 0.08) 100%);
+  border-left: 4px solid #27ae60;
+}
+
 .todo-item.completed .todo-text {
   text-decoration: line-through;
-  color: #adb5bd;
+  color: #27ae60;
+}
+
+.todo-item.completed .checkmark.completed {
+  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+  border-color: transparent;
+}
+
+/* Overdue task - Red theme */
+.todo-item.overdue {
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(192, 57, 43, 0.08) 100%);
+  border-left: 4px solid #e74c3c;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
+  }
+}
+
+.todo-item.overdue .todo-text {
+  color: #c0392b;
+}
+
+.todo-item.overdue .checkmark.overdue {
+  border-color: #e74c3c;
+}
+
+/* Active task - Default theme */
+.todo-item.active {
+  border-left: 4px solid transparent;
 }
 
 .checkbox-container {
@@ -215,14 +306,67 @@
   font-weight: bold;
 }
 
-.todo-text {
+.todo-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todo-text {
   font-size: 1rem;
   color: #343a40;
   word-break: break-word;
 }
 
-.delete-btn {
+.todo-deadline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.todo-deadline.completed {
+  color: #27ae60;
+}
+
+.todo-deadline.overdue {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.todo-deadline svg {
+  flex-shrink: 0;
+}
+
+.deadline-text {
+  opacity: 0.8;
+}
+
+.time-remaining {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.todo-deadline.overdue .time-remaining {
+  background: rgba(231, 76, 60, 0.15);
+  color: #c0392b;
+}
+
+.todo-deadline.completed .time-remaining {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+}
+
+.
+
+.overdue-text {
+  color: #e74c3c;
+  font-weight: 500;
+}delete-btn {
   background: none;
   border: none;
   color: #dee2e6;
@@ -296,6 +440,12 @@
   
   .todo-form {
     padding: 15px;
+    flex-direction: column;
+  }
+  
+  .add-btn {
+    width: 100%;
+    height: 48px;
   }
   
   .filter-buttons {
@@ -305,5 +455,9 @@
   .filter-btn {
     padding: 6px 15px;
     font-size: 0.85rem;
+  }
+  
+  .todo-deadline {
+    flex-wrap: wrap;
   }
 }

@@ -1,10 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
   const [todos, setTodos] = useState([])
   const [inputValue, setInputValue] = useState('')
+  const [deadline, setDeadline] = useState('')
   const [filter, setFilter] = useState('all')
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  // Update current time every second to check deadlines
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const isOverdue = (todo) => {
+    if (!todo.deadline || todo.completed) return false
+    return new Date(todo.deadline) < currentTime
+  }
 
   const addTodo = (e) => {
     e.preventDefault()
@@ -14,10 +29,12 @@ function App() {
         {
           id: Date.now(),
           text: inputValue.trim(),
-          completed: false
+          completed: false,
+          deadline: deadline || null
         }
       ])
       setInputValue('')
+      setDeadline('')
     }
   }
 
@@ -35,13 +52,46 @@ function App() {
     setTodos(todos.filter(todo => !todo.completed))
   }
 
+  const getTimeRemaining = (deadline) => {
+    if (!deadline) return null
+    const diff = new Date(deadline) - currentTime
+    if (diff < 0) return 'Overdue'
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    
+    if (days > 0) return `${days}d ${hours}h left`
+    if (hours > 0) return `${hours}h ${minutes}m left`
+    return `${minutes}m left`
+  }
+
+  const formatDeadline = (deadline) => {
+    if (!deadline) return ''
+    const date = new Date(deadline)
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+
   const filteredTodos = todos.filter(todo => {
     if (filter === 'active') return !todo.completed
     if (filter === 'completed') return todo.completed
+    if (filter === 'overdue') return isOverdue(todo)
     return true
   })
 
   const remainingCount = todos.filter(todo => !todo.completed).length
+  const overdueCount = todos.filter(todo => isOverdue(todo)).length
+
+  const getTodoStatus = (todo) => {
+    if (todo.completed) return 'completed'
+    if (isOverdue(todo)) return 'overdue'
+    return 'active'
+  }
 
   return (
     <div className="app-container">
@@ -52,13 +102,24 @@ function App() {
         </header>
 
         <form onSubmit={addTodo} className="todo-form">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="What needs to be done?"
-            className="todo-input"
-          />
+          <div className="form-inputs">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="What needs to be done?"
+              className="todo-input"
+            />
+            <div className="deadline-input-wrapper">
+              <input
+                type="datetime-local"
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+                className="deadline-input"
+              />
+              <span className="deadline-label">Set deadline</span>
+            </div>
+          </div>
           <button type="submit" className="add-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -86,6 +147,12 @@ function App() {
           >
             Completed
           </button>
+          <button
+            className={`filter-btn ${filter === 'overdue' ? 'active' : ''}`}
+            onClick={() => setFilter('overdue')}
+          >
+            Overdue {overdueCount > 0 && <span className="overdue-badge">{overdueCount}</span>}
+          </button>
         </div>
 
         <ul className="todo-list">
@@ -96,16 +163,28 @@ function App() {
             </li>
           ) : (
             filteredTodos.map(todo => (
-              <li key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+              <li key={todo.id} className={`todo-item ${getTodoStatus(todo)}`}>
                 <label className="checkbox-container">
                   <input
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => toggleTodo(todo.id)}
                   />
-                  <span className="checkmark"></span>
+                  <span className={`checkmark ${getTodoStatus(todo)}`}></span>
                 </label>
-                <span className="todo-text">{todo.text}</span>
+                <div className="todo-content">
+                  <span className="todo-text">{todo.text}</span>
+                  {todo.deadline && (
+                    <div className={`todo-deadline ${getTodoStatus(todo)}`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      <span className="deadline-text">{formatDeadline(todo.deadline)}</span>
+                      <span className="time-remaining">{getTimeRemaining(todo.deadline)}</span>
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={() => deleteTodo(todo.id)}
                   className="delete-btn"
@@ -125,6 +204,7 @@ function App() {
           <footer className="todo-footer">
             <span className="todo-count">
               {remainingCount} {remainingCount === 1 ? 'task' : 'tasks'} remaining
+              {overdueCount > 0 && <span className="overdue-text"> • {overdueCount} overdue</span>}
             </span>
             <button onClick={clearCompleted} className="clear-btn">
               Clear completed
