@@ -107,7 +107,18 @@ pipeline {
                 -e KUBECONFIG=/root/.kube/config \
                 bitnami/kubectl:latest \
                 set image deployment/react-frontend react=$DOCKER_IMAGE --record
+
+                # Wait for rollout to complete
+                docker run --rm \
+                --network host \
+                --volumes-from jenkins \
+                -v /home/esh/.kube:/root/.kube \
+                -e KUBECONFIG=/root/.kube/config \
+                bitnami/kubectl:latest \
+                rollout status deployment/react-frontend
                 '''
+
+                
             
             }
         }
