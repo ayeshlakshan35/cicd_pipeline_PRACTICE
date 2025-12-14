@@ -79,7 +79,7 @@ pipeline {
                 '''
             }
         }
-
+        
         stage('Deploy to Kubernetes') {
             steps {
                 echo "Deploying to Kubernetes using kubectl container..."
@@ -115,6 +115,15 @@ pipeline {
         }
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
