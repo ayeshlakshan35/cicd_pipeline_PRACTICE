@@ -145,7 +145,7 @@ function App() {
             className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
             onClick={() => setFilter('completed')}
           >
-            completed
+            Completed
           </button>
           <button
             className={`filter-btn ${filter === 'overdue' ? 'active' : ''}`}
