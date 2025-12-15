@@ -207,7 +207,7 @@ function App() {
               {overdueCount > 0 && <span className="overdue-text"> • {overdueCount} overdue</span>}
             </span>
             <button onClick={clearCompleted} className="clear-btn">
-              Clear completed
+              clear completed
             </button>
           </footer>
         )}
