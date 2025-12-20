@@ -376,6 +376,11 @@ body {
   align-self: flex-start;
 }
 
+.add-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(99, 102, 241, 0.4);
+}
+
 .add-btn:active,
 .add-btn.adding {
   transform: scale(0.95);
@@ -383,6 +388,10 @@ body {
 
 .add-btn svg {
   transition: transform var(--transition-fast);
+}
+
+.add-btn:hover svg {
+  transform: rotate(90deg);
 }
 
 /* ========================================
@@ -422,6 +431,12 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  transform: translateY(-1px);
 }
 
 .filter-btn.active {
@@ -483,6 +498,10 @@ body {
   border-radius: 3px;
 }
 
+.todo-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
 /* Todo Item */
 .todo-item {
   display: flex;
@@ -506,6 +525,12 @@ body {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.todo-item:hover {
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-md);
+  transform: translateX(4px);
 }
 
 /* Active Task */
@@ -576,6 +601,11 @@ body {
   transform: scale(0);
   transition: all var(--transition-fast);
   color: white;
+}
+
+.checkbox-container:hover .checkmark {
+  border-color: var(--primary-color);
+  background: rgba(99, 102, 241, 0.1);
 }
 
 .checkbox-container input:checked ~ .checkmark {
@@ -667,9 +697,20 @@ body {
   padding: 10px;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
+  opacity: 0;
+  transform: scale(0.8);
+  margin-left: 8px;
+}
+
+.todo-item:hover .delete-btn {
   opacity: 1;
   transform: scale(1);
-  margin-left: 8px;
+}
+
+.delete-btn:hover {
+  color: var(--danger-color);
+  background: #fef2f2;
+  transform: scale(1.1);
 }
 
 /* Empty State */
@@ -750,6 +791,12 @@ body {
   padding: 10px 18px;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
+}
+
+.clear-btn:hover {
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+  background: #fef2f2;
 }
 
 /* App Footer */
