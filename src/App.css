@@ -937,3 +937,543 @@ body {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
+
+/* ========================================
+   Enhanced Hover & Interactive Effects
+   ======================================== */
+
+/* App Card Hover Glow */
+.todo-app {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.todo-app:hover {
+  box-shadow: var(--shadow-2xl), 0 0 60px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+}
+
+/* Logo Icon Hover */
+.logo-icon {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-icon:hover {
+  transform: rotate(-10deg) scale(1.1);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.logo-icon svg {
+  transition: transform 0.3s ease;
+}
+
+.logo-icon:hover svg {
+  transform: scale(1.1);
+}
+
+/* Header Title Hover Effect */
+.todo-header h1 {
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.todo-header h1:hover {
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.2);
+  letter-spacing: 1px;
+}
+
+/* Stats Card Hover */
+.header-stats {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-stats:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: default;
+}
+
+.stat-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.stat-item:hover .stat-number {
+  transform: scale(1.2);
+}
+
+.stat-number {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Input Fields Enhanced Hover */
+.todo-input {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.todo-input:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.08);
+}
+
+.todo-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(99, 102, 241, 0.1);
+  transform: scale(1.01);
+}
+
+.deadline-input {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.deadline-input:hover {
+  border-color: var(--primary-light);
+  background: var(--bg-secondary);
+}
+
+.deadline-input:focus {
+  transform: scale(1.01);
+}
+
+/* Add Button Enhanced Effects */
+.add-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.add-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.add-btn:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+.add-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-xl), 0 0 40px rgba(99, 102, 241, 0.5);
+}
+
+.add-btn:active {
+  transform: scale(0.92);
+}
+
+/* Filter Buttons Enhanced */
+.filter-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.filter-btn:hover::before {
+  left: 100%;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-btn:active {
+  transform: scale(0.97);
+}
+
+.filter-btn.active {
+  transform: scale(1.02);
+}
+
+.filter-btn.active:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+.filter-btn .filter-icon {
+  transition: transform 0.3s ease;
+}
+
+.filter-btn:hover .filter-icon {
+  transform: scale(1.3) rotate(10deg);
+}
+
+/* Todo Item Enhanced Hover */
+.todo-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.todo-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: var(--primary-gradient);
+  transition: height 0.3s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+.todo-item:hover::before {
+  height: 100%;
+}
+
+.todo-item:hover {
+  transform: translateX(8px) scale(1.01);
+  box-shadow: var(--shadow-lg), -4px 0 20px rgba(99, 102, 241, 0.1);
+}
+
+.todo-item.completed:hover {
+  box-shadow: var(--shadow-lg), -4px 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.todo-item.overdue:hover {
+  box-shadow: var(--shadow-lg), -4px 0 20px rgba(239, 68, 68, 0.15);
+}
+
+/* Checkbox Enhanced Hover */
+.checkbox-container {
+  transition: transform 0.2s ease;
+}
+
+.checkbox-container:hover {
+  transform: scale(1.1);
+}
+
+.checkbox-container:hover .checkmark {
+  border-color: var(--primary-color);
+  background: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.checkbox-container:active {
+  transform: scale(0.95);
+}
+
+.checkmark {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  animation: checkPop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes checkPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Todo Text Hover */
+.todo-text {
+  transition: all 0.3s ease;
+}
+
+.todo-item:hover .todo-text {
+  color: var(--primary-dark);
+}
+
+.todo-item.completed:hover .todo-text {
+  color: var(--success-color);
+}
+
+.todo-item.overdue:hover .todo-text {
+  color: var(--danger-color);
+}
+
+/* Delete Button Enhanced */
+.delete-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.delete-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.delete-btn:hover::before {
+  width: 150%;
+  height: 150%;
+}
+
+.delete-btn:hover {
+  color: white;
+  background: var(--danger-color);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.delete-btn:hover svg {
+  animation: wiggle 0.5s ease;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+.delete-btn:active {
+  transform: scale(0.9);
+}
+
+/* Time Remaining Badge Hover */
+.time-remaining {
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.time-remaining:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Clear Button Enhanced */
+.clear-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.clear-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.clear-btn:hover::before {
+  left: 100%;
+}
+
+.clear-btn:hover {
+  border-color: var(--danger-color);
+  color: white;
+  background: var(--danger-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.clear-btn:hover svg {
+  animation: shake-small 0.4s ease;
+}
+
+@keyframes shake-small {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.clear-btn:active {
+  transform: scale(0.95);
+}
+
+/* Empty State Hover */
+.empty-illustration {
+  transition: all 0.4s ease;
+}
+
+.empty-state:hover .empty-illustration {
+  opacity: 0.6;
+  transform: scale(1.1) rotate(5deg);
+}
+
+.empty-state:hover .empty-illustration svg {
+  stroke: var(--primary-dark);
+}
+
+.empty-state h3,
+.empty-state p {
+  transition: all 0.3s ease;
+}
+
+.empty-state:hover h3 {
+  color: var(--primary-color);
+}
+
+/* App Footer Hover */
+.app-footer {
+  transition: all 0.3s ease;
+}
+
+.app-footer:hover {
+  color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.05);
+}
+
+/* Scrollbar Hover Effects */
+.todo-list::-webkit-scrollbar-thumb {
+  transition: background 0.3s ease;
+}
+
+.todo-list:hover::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+}
+
+/* Background Shapes Interaction */
+.app-container:hover .shape-1 {
+  animation-play-state: running;
+  opacity: 0.5;
+}
+
+.app-container:hover .shape-2 {
+  animation-play-state: running;
+  opacity: 0.5;
+}
+
+.app-container:hover .shape-3 {
+  animation-play-state: running;
+  opacity: 0.5;
+}
+
+/* Ripple Effect for Buttons */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Tooltip Styles */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  padding: 6px 12px;
+  background: var(--text-primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+/* Glow Effect on Focus */
+.todo-input:focus,
+.deadline-input:focus {
+  animation: glow-pulse 2s infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.1);
+  }
+}
+
+/* Magnetic Button Effect (subtle) */
+.add-btn,
+.filter-btn,
+.clear-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card Shine Effect */
+.todo-app::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 60%
+  );
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.todo-app:hover::after {
+  animation: shine 1.5s ease;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* Overdue Badge Pulse */
+.overdue-badge {
+  position: relative;
+}
+
+.overdue-badge::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--danger-color);
+  border-radius: inherit;
+  opacity: 0.5;
+  animation: badge-pulse 1.5s infinite;
+  z-index: -1;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 0; }
+}
